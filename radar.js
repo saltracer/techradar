@@ -56,6 +56,7 @@ function radar(id, data) {
       var blip = {
         id: i,
         name: entry.name,
+        description: entry.description,
         quadrant: history.quadrant,
         r: r,
         theta: theta,
@@ -89,7 +90,6 @@ function radar(id, data) {
       .attr('cy', 0)
       .attr('class', 'horizon');
 
-console.log(data.horizons);
     horizons.selectAll('text.horizon')
       .data(data.horizons.reverse().filter(function(d) { return d }))
       .enter()
@@ -97,7 +97,7 @@ console.log(data.horizons);
       .attr('class','horizon')
       .attr('dx', function(d,i) { return (i * horizon_unit) + 5; } )
       .attr('dy', 15 )
-      .text(function(d) { console.log(d); return d; });
+      .text(function(d) { return d; });
   }
 
   function add_quadrants(base) {
@@ -174,6 +174,37 @@ console.log(data.horizons);
       .attr('class', quadrant_class);
   }
 
+
+  function draw_lists(blip_data) {
+    // add the lists
+    var quadrants = new Object();
+    // figure out which quadrant this is
+    for (var j = 0, len = data.quadrants.length; j < len; j++) {
+      quadrants[data.quadrants[j]] = [];
+    }
+
+    for (var j = 0, len = blip_data.length; j < len; j++) {
+      blip = blip_data[j];
+      quadrant_blips = quadrants[blip.quadrant];
+      quadrants[blip.quadrant].push(blip);
+    }
+
+    for (var j = 0, len = data.quadrants.length; j < len; j++) {
+      quadrant_name = data.quadrants[j];
+      var ul = d3.select(id).append('ul');
+      ul.attr('class', "list")
+        .append('text')
+        .attr('class', "title")
+        .text(quadrant_name.toUpperCase());
+      ul.selectAll('li.quadrant')
+        .data(quadrants[quadrant_name])
+        .enter()
+        .append('li')
+        .attr('class',"quadrant" + quadrant_name)
+        .text(function(d) { return (d.name + " - " + d.description); });
+    }
+  }
+
   function draw_radar() {
     // add the horizons
     var base = svg.append('g')
@@ -221,14 +252,7 @@ console.log(data.horizons);
         .attr('class', 'name')
         .text(function(d) { return d.name; });
 
-    // add the lists
-    var ul = d3.select(id).append('ul');
-    ul.selectAll('li.quadrant')
-      .data(blip_data)
-      .enter()
-      .append('li')
-      .attr('class','quadrant')
-      .text(function(d) { return d.name; });
+    draw_lists(blip_data);
 
   }
   draw_radar();

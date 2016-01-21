@@ -1,6 +1,6 @@
 // radar renderer
 
-function polar_to_cartesian(r,t) {  
+function polar_to_cartesian(r,t) {
   var x = r * Math.cos(t);
   var y = r * Math.sin(t);
   return [x,y];
@@ -18,7 +18,7 @@ function radar(id, data) {
   var quad_angle = 2 * Math.PI / data.quadrants.length;
   var horizon_unit = horizonWidth / data.horizons.length;
   var color_scale = d3.scale.category10();
-    
+
 	var svg = d3.select(id).append('svg')
     .attr("width", width)
     .attr("height", height);
@@ -33,20 +33,20 @@ function radar(id, data) {
 
   function process_radar_data(data, currentTime) {
     var currentTime = currentTime || new Date();
-    // go through the data  
+    // go through the data
     var results = [];
     for (var i in data.data) {
       var entry = data.data[i];
       var history = entry.history.filter(function(e) {
         return (e.end == null || (e.end > currentTime && e.start < currentTime));
       })[0];
-      
+
       var quadrant_delta = 0;
 
       // figure out which quadrant this is
       for (var j = 0, len = data.quadrants.length; j < len; j++) {
         if (data.quadrants[j] == history.quadrant) {
-          quadrant_delta = quad_angle * j; 
+          quadrant_delta = quad_angle * j;
         }
       }
 
@@ -68,7 +68,7 @@ function radar(id, data) {
             theta2 = (history.direction_angle * quad_angle) + quadrant_delta,
             vector = polar_to_cartesian(r2, theta2);
 
-        blip.dx = vector[0] - cart[0]; 
+        blip.dx = vector[0] - cart[0];
         blip.dy = vector[1] - cart[1];
       }
       results.push(blip);
@@ -79,7 +79,7 @@ function radar(id, data) {
   function add_horizons(base) {
     var horizons = base
       .append('g')
-      .attr('class', 'horizons')
+      .attr('class', 'horizons');
     horizons.selectAll('.horizon')
       .data(data.horizons, identity)
       .enter()
@@ -87,7 +87,17 @@ function radar(id, data) {
       .attr('r', function(d,i) { return (i + 1) * horizon_unit; } )
       .attr('cx', 0)
       .attr('cy', 0)
-      .attr('class', 'horizon')
+      .attr('class', 'horizon');
+
+console.log(data.horizons);
+    horizons.selectAll('text.horizon')
+      .data(data.horizons.reverse().filter(function(d) { return d }))
+      .enter()
+      .append('text')
+      .attr('class','horizon')
+      .attr('dx', function(d,i) { return (i * horizon_unit) + 5; } )
+      .attr('dy', 15 )
+      .text(function(d) { console.log(d); return d; });
   }
 
   function add_quadrants(base) {
@@ -114,7 +124,7 @@ function radar(id, data) {
       .attr('stroke', function(d,i) {
         return color_scale(i);
       });
-    
+
     arc_function = d3.svg.arc()
       .outerRadius(function(d,i) {
         return d.outerRadius * horizonWidth;
@@ -128,15 +138,15 @@ function radar(id, data) {
       .endAngle(function(d,i) {
         return (d.quadrant + 1) * quad_angle + Math.PI/2;
       });
-    
+
     var quads = []
     for (var i = 0, ilen = data.quadrants.length; i < ilen; i++) {
       for (var j = 0, jlen = data.horizons.length; j < jlen; j++) {
         quads.push({
           outerRadius: (j + 1) / jlen,
           innerRadius: j / jlen,
-          quadrant: i, 
-          horizon: j, 
+          quadrant: i,
+          horizon: j,
           name: data.quadrants[i]
         });
       }
@@ -150,9 +160,9 @@ function radar(id, data) {
       .attr('class','quadrant')
       .attr('dx', horizonWidth / data.horizons.length)
       .attr('transform', function(d) { return 'rotate(' + (d.quadrant * text_angle + text_angle )+ ')' })
-      .text(function(d) { return d.name; })
+      .text(function(d) { return d.name; });
 
-    quadrants.selectAll('path.quadrant') 
+    quadrants.selectAll('path.quadrant')
       .data(quads)
       .enter()
       .append('path')
@@ -168,10 +178,10 @@ function radar(id, data) {
     // add the horizons
     var base = svg.append('g')
       .attr('transform', "translate(" + cx + "," + cy + ")");
-    
+
     add_horizons(base);
     add_quadrants(base);
-    
+
     var blip_data = process_radar_data(data);
     blip_data.sort(
       function (a,b) {
@@ -194,17 +204,17 @@ function radar(id, data) {
       .on('mouseout', function(d){
         d3.select(this).select("text.name").style({opacity:'0.1'});
       })
-    
+
     blips.append('line')
       .attr('class','direction')
       .attr('x1', 0).attr('y1', 0)
       .attr('x2', function(d) { return d.dx; })
       .attr('y2', function(d) { return d.dy; });
-      
+
     blips.append('circle')
       .attr('r', '7px')
     ;
-    
+
     blips.append("text")
         .attr("dy", "20px")
         .style("text-anchor", "middle")
@@ -219,7 +229,7 @@ function radar(id, data) {
       .append('li')
       .attr('class','quadrant')
       .text(function(d) { return d.name; });
-    
-  }  
+
+  }
   draw_radar();
 }

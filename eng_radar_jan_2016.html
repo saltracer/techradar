@@ -1,13 +1,14 @@
 <!doctype>
 <html>
 <head>
-<title>Test</title>
+<title>Engineering Radar - January 2016</title>
 <script src="d3.js"  charset="utf-8"></script>
 <script src="radar.js"></script>
 
 <style>
 svg, ul {
 	float: left;
+	list-style-type: none;
 }
 
 svg text.name { font-family: Arial, Sans-serif; font-size: 12px; opacity: 0.8 }
@@ -37,7 +38,15 @@ svg text.horizon {
 }
 
 .list .title {
+	font-size: 18pt;
 	font-weight: bold;
+}
+
+li.quadrant{
+	font-weight: bold;
+}
+li.quadrant p {
+	font-weight: normal;
 }
 </style>
 
@@ -68,13 +77,14 @@ radar('#radar',
 	// radar data
 	{
 		horizons: [ 'hold', 'assess', 'learn', 'use'],
-		quadrants: [ 'technology', 'tools', 'vendors', 'techniques & processes'],
+		quadrants: [ 'technology', 'tools', 'vendors', 'methodology'],
 		width: 1100,
 		height: 1500,
 		data: [
 			{
 				name: 'AAC',
 				description: 'The AAC codec for satellite transmission',
+				summary:'AAC has quickly become the de-facto standard for broadcast audio. MP2 and MP3 audio are on their way out. AAC provides significantly better sound for the same compression. This allows for faster file downloads to store and forward devices as well as reduces the need for satellite space segment dedicated to audio.',
 				links: ['http://aac.org'],
 				history: [
 					entry(new Date(2015,1,29),new Date(2015,9,29),'technology', 0.8, 0.5, 0.5, 0.5),
@@ -84,6 +94,7 @@ radar('#radar',
 			{
 				name: 'AES67',
 				description: 'The AoIP transmission and routing protocol',
+				summary:"AES67 is an Audio over IP (AoIP) protocol that allows uncompressed audio to flow over standard ethernet lines. Typically it is run over it's own, dedicated, infrastructure. It's advantages allow software based routing and switching, instead of the former hardware based technology with dedicated, proprietary, hardware.",
 				links: ['http://aes67.org'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'technology', 0.6, 0.6, 0.4, 0.6),
@@ -92,7 +103,8 @@ radar('#radar',
 			},
 			{
 				name: 'HD Radio',
-				description: 'Use digital radio and the rules to our advantage',
+				description: 'Take advantage of the gains provided by HD Radio',
+				summary:'The rules around HD Radio allow former competitors to now cooperate. By providing alternate feeds to the HD channel of another radio station, we can feed FM translators with the HD signal and boost the translator power at the same time.',
 				links: ['http://hdradio.org'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'technology', 0.6, 0.6, 0.4, 0.6),
@@ -102,6 +114,7 @@ radar('#radar',
 			{
 				name: 'C-Band',
 				description: 'Rain-fade resistant satellite technology',
+				summary:'C-Band satellite dishes are more expensive to permit and install. However their resistnace in the face of rain-fade is an unarguable advantage over the standard Ku feed in regions where rainfall is significant.',
 				links: ['http://cband.org'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'technology', 0.6, 0.6, 0.4, 0.6),
@@ -111,6 +124,7 @@ radar('#radar',
 			{
 				name: 'SNMP',
 				description: 'UDP based communication. Very low bandwidth',
+				summary:'Standing for Simple Network Management Protocol, SNMP is anything but simple. It is, however, a significant reason why Broadcast Manager and other tools used at EMF are able to be used over the VSAT network. It is very efficient atih bandwidth. The reason is because it is UDP based instead of TCP. This brings the risk of dropped packets, but with more than double the network efficiency.',
 				links: ['http://snmp.org'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'technology', 0.6, 0.6, 0.4, 0.6),
@@ -120,15 +134,17 @@ radar('#radar',
 			{
 				name: 'IP-based RDS',
 				description: 'Use multicast to transmit RDS info',
+				summary:'Instead of transmitting RDS information over the satellite channel, we should investigate using multicast to transmit RDS information to the Audemat RDS encoding box. The ViaSat hub is not capable of supporting this, however the Newtec hub is.',
 				links: ['http://rds.org'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'technology', 0.6, 0.6, 0.4, 0.6),
-					entry(new Date(2015,9,29),null,'techniques & processes', 0.65, 0.2, 0.35, 0.2)
+					entry(new Date(2015,9,29),null,'methodology', 0.65, 0.2, 0.35, 0.2)
 				]
 			},
 			{
 				name: 'HD Artist Experience',
 				description: 'Send album art to compatible radios',
+				summary:'Support the newest radios on HD by sending artwork and other pieces of data out the HD channel',
 				links: ['http://rds.org'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'technology', 0.6, 0.6, 0.4, 0.6),
@@ -138,24 +154,27 @@ radar('#radar',
 			{
 				name: 'IP Based closures',
 				description: 'Use IP instead of traditional copper to send triggers',
+				summary:'Traditional input into a satellite headend is copper based PIO inputs. Newer technology allows for closures from the automation system to be transmitted via ethernet. This allows greater flexibility at the cost of risking dropped packets.',
 				links: ['http://udp.org'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'technology', 0.6, 0.6, 0.4, 0.6),
-					entry(new Date(2015,9,29),null,'techniques & processes', 0.85, 0.65, 0.45, 0.65)
+					entry(new Date(2015,9,29),null,'methodology', 0.85, 0.35, 0.45, 0.35)
 				]
 			},
 			{
 				name: 'HTTP-based Monitoring',
 				description: 'Use tools and technologies to enable monitoring of all the things with HTTP enabled views',
+				summary:'Instead of using dedicated, or out-of-the-box solutions for monitoring, we build our own. This methodology allows us to customize the input of the tool to the various kinds of equipment installed while at the same time providing a browser based viewing solution.',
 				links: ['http://udp.org'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'technology', 0.6, 0.6, 0.4, 0.6),
-					entry(new Date(2015,9,29),null,'techniques & processes', 0.55, 0.5, 0.28, 0.5)
+					entry(new Date(2015,9,29),null,'methodology', 0.55, 0.5, 0.28, 0.5)
 				]
 			},
 			{
 				name: 'ODI',
 				description: 'Opportunistic Data Insertion',
+				summary:'Opportunistic Data Insertion (ODI) is a meachnism that allows different pieces of equipment to share satellite space segment. Using this technology in our audio and VSAT headend can allow for a greater cost-savings around space segment. The industry is currently going through a transition in standards and the newest equipment does not support the old standards of ODI.',
 				links: ['http://odi.org'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'technology', 0.6, 0.6, 0.4, 0.6),
@@ -165,6 +184,7 @@ radar('#radar',
 			{
 				name: 'AES3',
 				description: 'Digial Audio transmission protocol',
+				summary:'An early digital audio transmission protocol. This standard is still copper-based, and is not packetized like the newest AoIP protocols.',
 				links: ['http://rds.org'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'technology', 0.6, 0.6, 0.4, 0.6),
@@ -174,6 +194,7 @@ radar('#radar',
 			{
 				name: 'Synchrocast',
 				description: 'Satellite transmission of GPS locked signals for on-channel boosters',
+				summary:"A technology from GatesAir that allows the sychronization of on-channel FM audio using GPS clocking. The technology is proprietary, but it allows the 'steering' of audio crash zones",
 				links: ['http://synchrocast.org'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'technology', 0.6, 0.6, 0.4, 0.6),
@@ -183,6 +204,7 @@ radar('#radar',
 			{
 				name: 'SureStream',
 				description: 'Terrestrial Audio Streaming',
+				summary:'A proprietary technology that allows two terrestrail audio streams to be sychronized on playout with a seamless stiching of the audio back together. This technique allows for two lower bandwidth IP circuits to be used to feed audio.',
 				links: ['http://surestream.org'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'technology', 0.6, 0.6, 0.4, 0.6),
@@ -192,6 +214,7 @@ radar('#radar',
 			{
 				name: 'APTx CODEC',
 				description: 'Codec used for terrestrial audio streaming',
+				summary:'The audio coded used to stream audio between sites.',
 				links: ['http://surestream.org'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'technology', 0.6, 0.6, 0.4, 0.6),
@@ -201,6 +224,7 @@ radar('#radar',
 			{
 				name: 'iOS App',
 				description: 'Use mobile devices',
+				summary:'Mobile technology has taken over the work world. EMF currently has a native iOS application used for site status by the engineers. Expanding on the platform to allow the mobilization of SUI has been requested.',
 				links: ['http://apple.org'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'technology', 0.6, 0.6, 0.4, 0.6),
@@ -210,6 +234,7 @@ radar('#radar',
 			{
 				name: 'M2M',
 				description: 'Machine to Machine M&C system',
+				summary:'The technology used behind cell-modems connected at off-air fed signals. This allows VSAT level connectivity for a price similar to LEO.',
 				links: ['http://m2m.org'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'technology', 0.6, 0.6, 0.4, 0.6),
@@ -219,6 +244,7 @@ radar('#radar',
 			{
 				name: 'Ruby',
 				description: 'The programming language optimized for developer happiness',
+				summary:'A popular programming and scripting language. Popularize by the web programming framework Ruby on Rails, the language has proven itself to be very flexible and the community is broad enough to provide libraries and google based support when needed.',
 				links: ['http://ruby.com'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'tools', 0.6, 0.6, 0.4, 0.6),
@@ -228,6 +254,7 @@ radar('#radar',
 			{
 				name: 'PostGIS',
 				description: 'OpenSource geospatial database',
+				summary:"An ACID compliant SQL database that supports GIS types and queries. This means that asking the database 'What stations are near me?'' is a straight-forward implementation away",
 				links: ['http://postgis.com'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'tools', 0.6, 0.6, 0.4, 0.6),
@@ -237,6 +264,7 @@ radar('#radar',
 			{
 				name: 'ElasticSearch',
 				description: 'An indexing database',
+				summary:'An indexing database. It can store almost anything. It is designed to scale to multiple servers very easily, though it is not ACID compliant. It allows all styles of data to be stored and quickly queried, particularly time-series style data.',
 				links: ['http://elasticsearch.com'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'tools', 0.6, 0.6, 0.4, 0.6),
@@ -246,6 +274,7 @@ radar('#radar',
 			{
 				name: 'Ubuntu',
 				description: 'OpenSource linux server distribution',
+				summary:"An open-source linux based distribution. Satellite Engineering has standardized on Ubuntu Server, with it's free 5 year long term support as the platform of choice. Security updates and software patches are provided for free during that timespan and every 2 years a new LTS edition is released resulting in perpetual free support.",
 				links: ['http://ubuntu.com'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'tools', 0.6, 0.6, 0.4, 0.6),
@@ -255,6 +284,7 @@ radar('#radar',
 			{
 				name: 'Riak',
 				description: 'OpenSource key/value database',
+				summary:'A key/value database. It is masterless and can be queried very quickly. It is most efficient when used for storing data in buckets.',
 				links: ['http://riak.com'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'tools', 0.6, 0.6, 0.4, 0.6),
@@ -264,6 +294,7 @@ radar('#radar',
 			{
 				name: 'Arduino',
 				description: 'Low-cost hardware hacking platform',
+				summary:'An automation and prototyping platform. This hardware is very low cost with many inexpensive add-ons available. It is not a general purpose server, but designed to handle I/O easily.',
 				links: ['http://arduino.com'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'tools', 0.6, 0.6, 0.4, 0.6),
@@ -273,6 +304,7 @@ radar('#radar',
 			{
 				name: 'RasberryPi',
 				description: 'Low-cost hardware hacking platform',
+				summary:'A general purpose low-cost prototyping platform. It is low power, low-CPU, low-everything. But can run a full linux installation for general purpose usage.',
 				links: ['http://rasberrypi.com'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'tools', 0.6, 0.6, 0.4, 0.6),
@@ -282,15 +314,17 @@ radar('#radar',
 			{
 				name: 'Firmware testing',
 				description: 'Platform to test vendor firmware',
+				summary:'Develop a platform that can automatically and repeatably test new firmware from hardware manufactuers. Too many times, EMF has been hurt by firmware that doesnt meet our needs and breaks existing functionaly. A way to certify the firmware is needed.',
 				links: ['http://emf.com'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'tools', 0.6, 0.6, 0.4, 0.6),
-					entry(null,null,'tools', 0.65, 0.66, 0.65, 0.66)
+					entry(null,null,'methodology', 0.65, 0.66, 0.65, 0.66)
 				]
 			},
 			{
 				name: 'Open Source',
 				description: 'No-cost method of getting code',
+				summary:'When possible, use open source software.',
 				links: ['http://eff.com'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'tools', 0.6, 0.6, 0.4, 0.6),
@@ -300,6 +334,7 @@ radar('#radar',
 			{
 				name: 'Pico',
 				description: 'Provider of satellite audio playout system',
+				summary:'Our new provider of our audio playout and store and forward system. This new hardware has two tuners in the reciever and can stream audio and commands over the internet to the box as well.',
 				links: ['http://picodigital.com'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'tools', 0.6, 0.6, 0.4, 0.6),
@@ -309,6 +344,7 @@ radar('#radar',
 			{
 				name: 'Innovonics',
 				description: 'Provider of radio hardware',
+				summary:'Newly selected manufacturer of the modulation monitor device installed at the sites.',
 				links: ['http://innovonics.com'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'tools', 0.6, 0.6, 0.4, 0.6),
@@ -318,15 +354,17 @@ radar('#radar',
 			{
 				name: 'Sage',
 				description: 'EAS Hardware',
+				summary:'Manufactuer of the EAS device used for FCC compliance',
 				links: ['http://sagealerting.com'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'tools', 0.6, 0.6, 0.4, 0.6),
-					entry(null,null,'vendors', 0.1, 0.19, 0.1, 0.19)
+					entry(null,null,'vendors', 0.1, 0.25, 0.1, 0.25)
 				]
 			},
 			{
 				name: 'Worldcast',
 				description: 'Remote Control hardware',
+				summary:'Manufactuer of the remote control hardware (Relio, Audemat Control, Silver) and the headend server (Broadcast Manager).',
 				links: ['http://worldcast.com'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'tools', 0.6, 0.6, 0.4, 0.6),
@@ -336,6 +374,7 @@ radar('#radar',
 			{
 				name: 'Newtec',
 				description: 'VSAT Hub',
+				summary:'Manufacter of the VSAT Hub (Dialog) and proprietary terminals. Without this we have no network-wide IP connectivity.',
 				links: ['http://newtec.com'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'tools', 0.6, 0.6, 0.4, 0.6),
@@ -345,6 +384,7 @@ radar('#radar',
 			{
 				name: 'Wegener',
 				description: 'Satellite Audio Playout system',
+				summary:'Provider of the previous generation of audio and store and forward playout system.',
 				links: ['http://wegener.com'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'tools', 0.6, 0.6, 0.4, 0.6),
@@ -354,6 +394,7 @@ radar('#radar',
 			{
 				name: 'DaySequerra',
 				description: 'Radio Hardware',
+				summary:'Provider of the previous model of modulation monitors',
 				links: ['http://daysequerra.com'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'tools', 0.6, 0.6, 0.4, 0.6),
@@ -363,6 +404,7 @@ radar('#radar',
 			{
 				name: 'ViaSat',
 				description: 'VSAT Hub',
+				summary:'Provider of the previous generation of VSAT hub and modems.',
 				links: ['http://viasat.com'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'tools', 0.6, 0.6, 0.4, 0.6),
@@ -372,6 +414,7 @@ radar('#radar',
 			{
 				name: 'KORE',
 				description: 'M2M Tech provider',
+				summary:'First provider of M2M technology.',
 				links: ['http://koretechnology.com'],
 				history: [
 					// entry(new Date(2016,1,29),new Date(2016,9,29),'tools', 0.6, 0.6, 0.4, 0.6),

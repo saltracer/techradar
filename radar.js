@@ -57,6 +57,7 @@ function radar(id, data) {
         id: i,
         name: entry.name,
         description: entry.description,
+        summary: entry.summary,
         quadrant: history.quadrant,
         r: r,
         theta: theta,
@@ -191,6 +192,22 @@ function radar(id, data) {
 
     for (var j = 0, len = data.quadrants.length; j < len; j++) {
       quadrant_name = data.quadrants[j];
+      blips = quadrants[quadrant_name];
+
+      blips.sort(
+        function (a,b) {
+          if (a.name < b.name)
+            return -1;
+          if (a.name > b.name)
+            return 1;
+          return 0;
+        });
+
+      quadrants[quadrant_name] = blips;
+    }
+
+    for (var j = 0, len = data.quadrants.length; j < len; j++) {
+      quadrant_name = data.quadrants[j];
       var ul = d3.select(id).append('ul');
       ul.attr('class', "list")
         .append('text')
@@ -200,8 +217,10 @@ function radar(id, data) {
         .data(quadrants[quadrant_name])
         .enter()
         .append('li')
-        .attr('class',"quadrant" + quadrant_name)
-        .text(function(d) { return (d.name + " - " + d.description); });
+        .attr('class',"quadrant " + quadrant_name)
+        .text(function(d) { return (d.name + " - " + d.description); })
+        .append('p')
+        .text(function(d){return d.summary});
     }
   }
 

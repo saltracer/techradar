@@ -19,6 +19,8 @@ function radar(id, data) {
   var horizon_unit = horizonWidth / data.horizons.length;
   var color_scale = d3.scale.category10();
 
+  draw_title();
+
 	var svg = d3.select(id).append('svg')
     .attr("width", width)
     .attr("height", height);
@@ -224,6 +226,13 @@ function radar(id, data) {
     }
   }
 
+  function draw_title() {
+    console.log(data.title);
+    title = d3.select(id).append("h1");
+    title.attr("class", "radar-title")
+      .text(data.title);
+  }
+
   function draw_radar() {
     // add the horizons
     var base = svg.append('g')
@@ -272,7 +281,7 @@ function radar(id, data) {
         .text(function(d) { return d.name; });
 
     draw_lists(blip_data);
-
   }
+
   draw_radar();
 }

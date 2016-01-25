@@ -11,6 +11,12 @@ svg, ul {
 	list-style-type: none;
 }
 
+@media print {
+	svg, ul {
+		break-after: always;
+	}
+}
+
 svg text.name { font-family: Arial, Sans-serif; font-size: 12px; opacity: 0.8 }
 svg line.quadrant { stroke-width: 2px;}
 svg circle.horizon { stroke: #999; stroke-width: 1px; stroke-opacity: 2; fill: none;}
@@ -44,9 +50,15 @@ svg text.horizon {
 
 li.quadrant{
 	font-weight: bold;
+	max-width: 550px;
 }
 li.quadrant p {
 	font-weight: normal;
+	max-width: 550px;
+}
+
+.radar-title {
+	text-align: center;
 }
 </style>
 
@@ -56,30 +68,24 @@ li.quadrant p {
 <script>
 
 function entry(start, end, quadrant, position, position_angle, direction, direction_angle) {
-	return {
-
-		start: start, // start date that this entry applies for
-
-		end: end, // end date for the entry
-
-		quadrant: quadrant, // the quadrant label
-
-		position: position, // position is within the total of horizons.
-
-		position_angle: position_angle, // angles are fractions of pi/2 (ie of a quadrant)
-
-		direction: direction, // the learning end point with the total of horizons.
-
-		direction_angle: direction_angle // angles are fractions of pi/2 (ie of a quadrant)
-	};
+  return {
+    start: start, // start date that this entry applies for
+    end: end, // end date for the entry
+    quadrant: quadrant, // the quadrant label
+    position: position, // position is within the total of horizons.
+    position_angle: position_angle, // angles are fractions of pi/2 (ie of a quadrant)
+    direction: direction, // the learning end point with the total of horizons.
+    direction_angle: direction_angle // angles are fractions of pi/2 (ie of a quadrant)
+  };
 }
 radar('#radar',
 	// radar data
 	{
+		title: "EMF Engineer Radar: January 2016",
 		horizons: [ 'hold', 'assess', 'learn', 'use'],
 		quadrants: [ 'technology', 'tools', 'vendors', 'methodology'],
 		width: 1100,
-		height: 1500,
+		height: 1370,
 		data: [
 			{
 				name: 'AAC',
